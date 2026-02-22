@@ -1,470 +1,290 @@
 <!doctype html>
 <html lang="es">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="color-scheme" content="light" />
-		<title>Cumple feliz</title>
-		<style>
-			:root {
-				--bg: #ffd6e8; /* rosado claro */
-				--card: rgba(255, 255, 255, 0.75);
-				--text: #3a1b2a;
-				--accent: #ff2b4f;
-			}
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light" />
+<title>Cumple feliz</title>
 
-			* {
-				box-sizing: border-box;
-			}
+<style>
+:root {
+  --bg: #ffd6e8;
+  --card: rgba(255,255,255,0.75);
+  --text: #3a1b2a;
+  --accent: #ff2b4f;
+}
 
-			html,
-			body {
-				height: 100%;
-			}
+* { box-sizing: border-box; }
 
-			body {
-				margin: 0;
-				font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial,
-					"Noto Sans", "Liberation Sans", sans-serif;
-				color: var(--text);
-				background: radial-gradient(1200px 800px at 20% 10%, #ffe7f2 0%, var(--bg) 45%, #ffcade 100%);
-				overflow: hidden;
-			}
+html, body { height: 100%; }
 
-			/* Fondo de partículas */
-			#stars {
-				position: fixed;
-				inset: 0;
-				width: 100%;
-				height: 100%;
-				display: block;
-				z-index: 0;
-				pointer-events: none;
-			}
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: radial-gradient(1200px 800px at 20% 10%, #ffe7f2 0%, var(--bg) 45%, #ffcade 100%);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
-			/* Contenido */
-			.wrap {
-				position: relative;
-				z-index: 1;
-				min-height: 100%;
-				display: grid;
-				place-items: center;
-				padding: 32px 18px;
-			}
+/* Fondo partículas */
+#stars {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
 
-			.card {
-				width: min(760px, 100%);
-				background: transparent;
-				border: none;
-				border-radius: 22px;
-				backdrop-filter: none;
-				-webkit-backdrop-filter: none;
-				box-shadow: none;
-				padding: 26px 22px;
-			}
+.wrap {
+  position: relative;
+  z-index: 1;
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px 14px;
+}
 
-			h1 {
-				margin: 0 0 8px;
-				font-size: clamp(30px, 4.5vw, 54px);
-				letter-spacing: 0.2px;
-			}
+.card {
+  width: min(760px,100%);
+  background: transparent;
+  border-radius: 22px;
+  padding: 10px;
+}
 
-			p {
-				margin: 0;
-				font-size: clamp(16px, 2.2vw, 20px);
-				line-height: 1.5;
-				opacity: 0.92;
-			}
+.gif {
+  display: grid;
+  place-items: center;
+}
 
-			.pill {
-				display: inline-flex;
-				align-items: center;
-				gap: 10px;
-				margin-top: 14px;
-				padding: 10px 14px;
-				border-radius: 999px;
-				background: rgba(255, 255, 255, 0.75);
-				border: 1px solid rgba(255, 43, 79, 0.2);
-				font-weight: 600;
-			}
+.gif img {
+  width: 95%;
+  max-width: 420px;
+  height: auto;
+  cursor: pointer;
+}
 
-			.dot {
-				width: 10px;
-				height: 10px;
-				border-radius: 50%;
-				background: var(--accent);
-				box-shadow: 0 0 14px rgba(255, 43, 79, 0.7);
-			}
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
 
-			.gif {
-				display: grid;
-				place-items: center;
-				margin-top: 10px;
-			}
+.modal[aria-hidden="false"] {
+  display: flex;
+}
 
-			.gif img {
-				width: min(520px, 100%);
-				height: auto;
-				border-radius: 0;
-				border: none;
-				box-shadow: none;
-				cursor: pointer;
-			}
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
 
-			/* Modal */
-			.modal {
-				position: fixed;
-				inset: 0;
-				z-index: 5;
-				display: none;
-				align-items: center;
-				justify-content: center;
-				padding: 18px;
-			}
+.modal__panel {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 90vh;
+  background-image: url("https://i.pinimg.com/736x/10/3e/c7/103ec7b89932ce814fb49e6da142a3f5.jpg");
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
 
-			.modal[aria-hidden="false"] {
-				display: flex;
-			}
+.modal__content {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 40px 16px;
+  text-align: center;
+}
 
-			.modal__backdrop {
-				position: absolute;
-				inset: 0;
-				background: rgba(0, 0, 0, 0.45);
-				backdrop-filter: blur(2px);
-				-webkit-backdrop-filter: blur(2px);
-			}
+.modal__textwrap {
+  width: 100%;
+  max-width: 640px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 16px;
+  padding: 18px;
+}
 
-			.modal__panel {
-				position: relative;
-				width: min(900px, 100%);
-				height: min(78vh, 720px);
-				background-image: url("https://i.pinimg.com/736x/10/3e/c7/103ec7b89932ce814fb49e6da142a3f5.jpg");
-				background-size: cover;
-				background-position: center;
-				border-radius: 18px;
-				overflow: hidden;
-				box-shadow: 0 22px 80px rgba(0, 0, 0, 0.35);
-			}
+.modal__title {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
 
-			.modal__content {
-				position: absolute;
-				inset: 0;
-				display: grid;
-				place-items: center;
-				padding: 56px 22px;
-				text-align: center;
-			}
+.modal__text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
 
-			.modal__textwrap {
-				width: min(640px, 100%);
-				color: rgba(58, 27, 42, 0.98);
-				text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
-				background: rgba(255, 255, 255, 0.35);
-				border-radius: 16px;
-				padding: 18px 18px;
-			}
+.modal__sign {
+  font-weight: bold;
+  margin-top: 12px;
+}
 
-			.modal__title {
-				margin: 0 0 8px;
-				font-size: clamp(22px, 3.3vw, 34px);
-				letter-spacing: 0.2px;
-			}
+.modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.9);
+  font-size: 24px;
+  cursor: pointer;
+}
 
-			.modal__text {
-				margin: 0;
-				font-size: clamp(15px, 2.2vw, 18px);
-				line-height: 1.55;
-				opacity: 0.98;
-			}
+/* GIF superior */
+.top-gif {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
 
-			.modal__text + .modal__text {
-				margin-top: 10px;
-			}
+.top-gif img {
+  width: 85%;
+  max-width: 380px;
+}
 
-			.modal__sign {
-				margin-top: 12px;
-				font-weight: 800;
-				letter-spacing: 0.2px;
-				opacity: 0.95;
-			}
+/* Responsive extra */
+@media (max-width: 480px){
+  .modal__panel {
+    border-radius: 0;
+    height: 95vh;
+  }
+}
+</style>
+</head>
 
-			.modal__close {
-				position: absolute;
-				top: 10px;
-				right: 10px;
-				width: 42px;
-				height: 42px;
-				border: none;
-				border-radius: 999px;
-				background: rgba(255, 255, 255, 0.82);
-				color: #1a0c12;
-				font-size: 22px;
-				line-height: 42px;
-				cursor: pointer;
-				box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-			}
+<body>
 
-			.top-gif {
-				position: fixed;
-				top: 14px;
-				left: 50%;
-				transform: translateX(-50%);
-				z-index: 1;
-				pointer-events: none;
-			}
+<canvas id="stars"></canvas>
 
-			.top-gif img {
-				width: min(420px, 92vw);
-				height: auto;
-				border-radius: 0;
-				border: none;
-				box-shadow: none;
-			}
+<div class="top-gif">
+  <img src="https://i.pinimg.com/originals/d1/76/4a/d1764aba330385413cbef4855f91dd63.gif">
+</div>
 
-			/* Respeta "reducir movimiento" */
-			@media (prefers-reduced-motion: reduce) {
-				body {
-					overflow: auto;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<canvas id="stars" aria-hidden="true"></canvas>
+<main class="wrap">
+  <section class="card">
+    <div class="gif">
+      <img id="mainGift"
+      src="https://i.pinimg.com/originals/32/86/22/32862299f971a476048df2b5ffbdbd15.gif"
+      alt="Feliz cumpleaños">
+    </div>
+  </section>
+</main>
 
-		<div class="top-gif" aria-hidden="true">
-			<img
-				src="https://i.pinimg.com/originals/d1/76/4a/d1764aba330385413cbef4855f91dd63.gif"
-				alt=""
-				loading="lazy"
-				decoding="async"
-			/>
-		</div>
+<div id="giftModal" class="modal" aria-hidden="true">
+  <div class="modal__backdrop" data-close="true"></div>
+  <div class="modal__panel">
+    <button class="modal__close" data-close="true">×</button>
+    <div class="modal__content">
+      <div class="modal__textwrap">
+        <h2 class="modal__title">Feliz cumpleaños, mi querida sobrina</h2>
+        <p class="modal__text">
+          Hoy es un día muy especial porque celebramos la alegría que trajiste a nuestras vidas.
+          Verte crecer ha sido uno de los regalos más hermosos.porque eres una niña increíble, llena de dulzura, 
+		  inteligencia y una sonrisa que ilumina todo a tu alrededor.
+        </p>
+        <p class="modal__text">
+          Deseo que este nuevo año esté lleno de sueños cumplidos,
+          momentos felices y muchas aventuras.que te hagan reír.
+		   Que nunca pierdas esa inocencia tan linda, esa forma tan especial de ver el mundo y esa capacidad de hacer feliz a todos con tu cariño.
+        </p>
+        <p class="modal__text">
+          Recuerda que siempre estaré para ti.
+          Estoy orgulloso de ti y te quiero muchísimo.
+		  Que la vida te regale siempre amor, salud y muchísima felicidad.
+        </p>
+        <div class="modal__sign">¡Feliz cumpleaños hija! 🎉</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-		<main class="wrap">
-			<section class="card">
-				<div class="gif">
-					<img
-						id="mainGift"
-						src="https://i.pinimg.com/originals/32/86/22/32862299f971a476048df2b5ffbdbd15.gif"
-						alt="GIF de feliz cumpleaños"
-						loading="lazy"
-						decoding="async"
-					/>
-				</div>
-			</section>
-		</main>
+<audio id="birthdaySong"
+src="https://github.com/Baque2005/Organizador/raw/refs/heads/master/As%20The%20World%20Caves%20In%20-%20Matt%20Maltese%20(Cover%20by%20Sarah%20Cothran).mp3">
+</audio>
 
-		<div
-			id="giftModal"
-			class="modal"
-			role="dialog"
-			aria-modal="true"
-			aria-hidden="true"
-		>
-			<div class="modal__backdrop" data-close="true"></div>
-			<div class="modal__panel" aria-label="Fondo especial">
-				<button class="modal__close" type="button" aria-label="Cerrar" data-close="true">×</button>
-				<div class="modal__content">
-					<div class="modal__textwrap">
-						<h2 class="modal__title">Feliz cumpleaños, mi querida sobrina</h2>
-						<p class="modal__text">
-							Hoy es un día muy especial porque celebramos la alegría que trajiste a nuestras vidas desde el primer momento. 
-							Verte crecer ha sido uno de los regalos más hermosos, porque eres una niña increíble, llena de dulzura, inteligencia y una sonrisa que ilumina todo a tu alrededor.
-						<p class="modal__text">
-							Deseo que este nuevo año de vida esté lleno de sueños cumplidos, momentos felices y muchas aventuras que te hagan reír. 
-							Que nunca pierdas esa inocencia tan linda, esa forma tan especial de ver el mundo y esa capacidad de hacer feliz a todos con tu cariño.
-						</p>
-						<p class="modal__text">
-							Recuerda siempre que cuentas conmigo para lo que necesites, que estoy orgulloso de ti y que te quiero más de lo que imaginas.
-							Que la vida te regale siempre amor, salud y muchísima felicidad.
-						</p>
-						<div class="modal__sign">¡Feliz cumpleaños, hija!</div>
-					</div>
-				</div>
-			</div>
-		</div>
+<script>
+const mainGift = document.getElementById("mainGift");
+const giftModal = document.getElementById("giftModal");
+const birthdaySong = document.getElementById("birthdaySong");
+const closeTargets = giftModal.querySelectorAll('[data-close="true"]');
 
-		<audio
-			id="birthdaySong"
-			src="https://github.com/Baque2005/Organizador/raw/refs/heads/master/As%20The%20World%20Caves%20In%20-%20Matt%20Maltese%20(Cover%20by%20Sarah%20Cothran).mp3"
-			preload="auto"
-		></audio>
+function openModal(){
+  giftModal.setAttribute("aria-hidden","false");
+  if(birthdaySong){
+    birthdaySong.currentTime = 0;
+    birthdaySong.muted = false;
+    birthdaySong.play().catch(()=>{});
+  }
+}
 
-		<script>
-			(function () {
-				const prefersReducedMotion = window.matchMedia(
-					"(prefers-reduced-motion: reduce)"
-				).matches;
+function closeModal(){
+  giftModal.setAttribute("aria-hidden","true");
+}
 
-				const mainGift = document.getElementById("mainGift");
-				const giftModal = document.getElementById("giftModal");
-				const birthdaySong = document.getElementById("birthdaySong");
-				const closeTargets = giftModal.querySelectorAll('[data-close="true"]');
-				let lastFocusedEl = null;
+mainGift.addEventListener("click", openModal);
 
-				function openModal() {
-					lastFocusedEl = document.activeElement;
-					giftModal.setAttribute("aria-hidden", "false");
-					const closeBtn = giftModal.querySelector(".modal__close");
-					closeBtn && closeBtn.focus();
+closeTargets.forEach(el=>{
+  el.addEventListener("click", closeModal);
+});
 
-					if (birthdaySong) {
-						try {
-							birthdaySong.currentTime = 0;
-						} catch {
-							// ignore
-						}
-						const p = birthdaySong.play();
-						if (p && typeof p.catch === "function") p.catch(() => {});
-					}
-				}
+window.addEventListener("keydown", e=>{
+  if(e.key==="Escape") closeModal();
+});
 
-				function closeModal() {
-					giftModal.setAttribute("aria-hidden", "true");
-					if (lastFocusedEl && typeof lastFocusedEl.focus === "function") {
-						lastFocusedEl.focus();
-					}
-					lastFocusedEl = null;
-				}
+/* Fondo partículas simple */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+let w,h,particles=[];
 
-				mainGift.addEventListener("click", openModal);
-				mainGift.addEventListener("keydown", (e) => {
-					if (e.key === "Enter" || e.key === " ") {
-						e.preventDefault();
-						openModal();
-					}
-				});
-				mainGift.setAttribute("tabindex", "0");
-				mainGift.setAttribute("role", "button");
-				mainGift.setAttribute("aria-label", "Abrir fondo especial");
+function resize(){
+  w=canvas.width=window.innerWidth;
+  h=canvas.height=window.innerHeight;
+  particles=[];
+  for(let i=0;i<120;i++){
+    particles.push({
+      x:Math.random()*w,
+      y:Math.random()*h,
+      r:Math.random()*2+1,
+      d:Math.random()*1
+    });
+  }
+}
 
-				for (const el of closeTargets) {
-					el.addEventListener("click", closeModal);
-				}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle="rgba(255,50,90,0.8)";
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+    p.y+=p.d;
+    if(p.y>h) p.y=0;
+  });
+  requestAnimationFrame(draw);
+}
 
-				window.addEventListener("keydown", (e) => {
-					if (e.key === "Escape" && giftModal.getAttribute("aria-hidden") === "false") {
-						closeModal();
-					}
-				});
+window.addEventListener("resize",resize);
+resize();
+draw();
+</script>
 
-				const canvas = document.getElementById("stars");
-				const ctx = canvas.getContext("2d", { alpha: true });
-
-				let width = 0;
-				let height = 0;
-				let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-				let particles = [];
-				let rafId = 0;
-
-				function rand(min, max) {
-					return min + Math.random() * (max - min);
-				}
-
-				function resize() {
-					width = window.innerWidth;
-					height = window.innerHeight;
-					dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-
-					canvas.width = Math.floor(width * dpr);
-					canvas.height = Math.floor(height * dpr);
-					canvas.style.width = width + "px";
-					canvas.style.height = height + "px";
-					ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-					const baseCount = Math.floor((width * height) / 14000);
-					const count = Math.max(80, Math.min(220, baseCount));
-					particles = new Array(count).fill(0).map(() => createParticle());
-				}
-
-				function createParticle() {
-					const r = rand(0.8, 2.1);
-					return {
-						x: rand(0, width),
-						y: rand(0, height),
-						r,
-						// "twinkle" (prende/apaga)
-						phase: rand(0, Math.PI * 2),
-						speed: rand(0.8, 2.2),
-						// brillo base
-						base: rand(0.05, 0.22),
-						// movimiento suave
-						vx: rand(-0.08, 0.08),
-						vy: rand(-0.06, 0.06),
-					};
-				}
-
-				function step(t) {
-					ctx.clearRect(0, 0, width, height);
-
-					// Color rojo (con leve variación)
-					for (const p of particles) {
-						// movimiento lento
-						p.x += p.vx;
-						p.y += p.vy;
-
-						if (p.x < -10) p.x = width + 10;
-						if (p.x > width + 10) p.x = -10;
-						if (p.y < -10) p.y = height + 10;
-						if (p.y > height + 10) p.y = -10;
-
-						// titilar: seno que sube/baja (prende/apaga)
-						const tw = (Math.sin((t / 1000) * p.speed + p.phase) + 1) / 2; // 0..1
-						const alpha = Math.min(0.9, p.base + tw * 0.75);
-
-						// brillo (glow)
-						ctx.beginPath();
-						ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-						ctx.closePath();
-
-						// centro brillante
-						ctx.fillStyle = `rgba(255, 30, 60, ${alpha})`;
-						ctx.shadowColor = `rgba(255, 30, 60, ${Math.max(0.15, alpha)})`;
-						ctx.shadowBlur = 10;
-						ctx.fill();
-
-						// halo suave
-						ctx.beginPath();
-						ctx.arc(p.x, p.y, p.r + 2.2, 0, Math.PI * 2);
-						ctx.closePath();
-						ctx.fillStyle = `rgba(255, 30, 60, ${alpha * 0.16})`;
-						ctx.shadowBlur = 0;
-						ctx.fill();
-					}
-
-					rafId = requestAnimationFrame(step);
-				}
-
-				function start() {
-					resize();
-					if (!prefersReducedMotion) rafId = requestAnimationFrame(step);
-				}
-
-				function stop() {
-					if (rafId) cancelAnimationFrame(rafId);
-					rafId = 0;
-				}
-
-				window.addEventListener("resize", () => {
-					resize();
-				});
-
-				// Si el usuario cambia la preferencia del sistema
-				try {
-					const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-					mq.addEventListener("change", () => {
-						stop();
-						if (!mq.matches) start();
-					});
-				} catch {
-					// Safari/compat
-				}
-
-				start();
-			})();
-		</script>
-	</body>
+</body>
 </html>
-
-
